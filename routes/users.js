@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Users = require("../models/Users");
 const cors = require("cors");
-import bcryptjs from "bcryptjs";
+const bcrypt = require("bcryptjs");
 
 const app = express();
 app.use(cors());
@@ -18,8 +18,8 @@ router.post("/", async (req, res) => {
   const usernameExists = await Users.findOne({ username: req.body.username });
   if (!usernameExists) {
     try {
-      const salt = await bcryptjs.genSalt(10);
-      const hashedPassword = await bcryptjs.hash(req.body.password, salt);
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(req.body.password, salt);
       const user = new Users({
         username: req.body.username,
         password: hashedPassword,
