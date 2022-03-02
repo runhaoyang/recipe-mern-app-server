@@ -3,11 +3,16 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const axios = require("axios");
 
 const app = express();
 const port = 5000;
 
 app.use(cors());
+
+// Import routes
+const usersRoute = require("./routes/users");
+app.use("/users", usersRoute);
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
@@ -23,10 +28,6 @@ db.once("open", function () {
 // Configuring body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// Import routes
-const usersRoute = require("./routes/users");
-app.use("/users", usersRoute);
 
 app.listen(process.env.PORT || 5000, () =>
   console.log(`App listening on port ${port}!`)
