@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
+const Users = require("./models");
 
 router.get("/", async (req, res) => {
-  const user = await userModel.find({});
+  const user = await Users.find({});
   res.send(user);
 });
 
 router.post("/", (req, res) => {
-  const user = new userModel({
+  const user = new Users({
     username: req.body.username,
     password: req.body.password,
   });
