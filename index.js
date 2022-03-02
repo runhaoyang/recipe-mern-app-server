@@ -10,17 +10,10 @@ const port = 5000;
 
 app.use(cors());
 
-mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to mongodb atlas");
-  })
-  .catch((error) => {
-    console.log("Error connecting to mongodb", error);
-  });
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
