@@ -30,6 +30,6 @@ app.get("/details", async (req, res) => {
   res.send(user);
 });
 
-app.listen(port, () =>
+app.listen(process.env.PORT || 5000), () =>
   console.log(`Hello world app listening on port ${port}!`)
 );
