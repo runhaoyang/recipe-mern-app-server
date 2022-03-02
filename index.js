@@ -25,10 +25,22 @@ db.once("open", function () {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get("/details", async (req, res) => {
+app.get("/users", async (req, res) => {
   const user = await userModel.find({});
   res.send(user);
 });
 
-app.listen(process.env.PORT || 5000),
-  () => console.log(`Hello world app listening on port ${port}!`);
+app.post("/users", (req, res) => {
+  const user = new userModel({
+    username: req.body.username,
+    password: req.body.password,
+  });
+  user
+    .save()
+    .then((data) => res.json(data))
+    .catch((err) => res.json({ message: err }));
+});
+
+app.listen(process.env.PORT || 5000, () =>
+  console.log(`App listening on port ${port}!`)
+);
