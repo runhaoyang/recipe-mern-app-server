@@ -25,21 +25,9 @@ db.once("open", function () {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get("/users", async (req, res) => {
-  const user = await userModel.find({});
-  res.send(user);
-});
-
-app.post("/users", (req, res) => {
-  const user = new userModel({
-    username: req.body.username,
-    password: req.body.password,
-  });
-  user
-    .save()
-    .then((data) => res.json(data))
-    .catch((err) => res.json({ message: err }));
-});
+// Import routes
+const usersRoute = require("./routes/users");
+app.use("/users", usersRoute);
 
 app.listen(process.env.PORT || 5000, () =>
   console.log(`App listening on port ${port}!`)
