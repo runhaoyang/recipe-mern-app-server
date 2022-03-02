@@ -31,5 +31,5 @@ app.get("/details", async (req, res) => {
 });
 
 app.listen(port, () =>
-  console.log(`Hello world, app listening on port ${port}!`)
+  console.log(`Hello world app listening on port ${port}!`)
 );
