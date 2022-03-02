@@ -16,11 +16,18 @@ router.post("/", async (req, res) => {
     username: req.body.username,
     password: req.body.password,
   });
-  try {
-    const savedUser = await user.save();
-    res.json(savedUser);
-  } catch (err) {
-    res.json({ message: err });
+  // Check to see if username already exists in the database
+  const usernameExists = await Users.findOne({ username: req.body.username });
+  if (!usernameExists) {
+    try {
+      const savedUser = await user.save();
+      res.json(savedUser);
+    } catch (err) {
+      res.json({ message: err });
+    }
+  } else {
+    res.json("Username already exists");
+    console.log("Username already exists");
   }
 });
 
