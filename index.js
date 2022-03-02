@@ -3,19 +3,24 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const userModel = require("./models");
+require("dotenv").config();
 
 const app = express();
 const port = 5000;
 
 app.use(cors());
 
-mongoose.connect(
-  "mongodb+srv://admin:Pass123@cluster0.yahvt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-  {
+mongoose
+  .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  }
-);
+  })
+  .then(() => {
+    console.log("Connected to mongodb atlas");
+  })
+  .catch((error) => {
+    console.log("Error connecting to mongodb", error);
+  });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
