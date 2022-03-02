@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
       res.json({ message: err });
     }
   } else {
-    res.json("Username already exists");
+    res.status(400).send("User already exists");
   }
 });
 
