@@ -11,10 +11,13 @@ router.get("/", async (req, res) => {
   res.send(user);
 });
 
+// User registration
 router.post("/", async (req, res) => {
+  const saltPassword = await bcrypt.genSalt(10);
+  const securedPassword = await bcrypt.hash(req.body.password, saltPassword);
   const user = new Users({
     username: req.body.username,
-    password: req.body.password,
+    password: securedPassword,
   });
   // Check to see if username already exists in the database
   const usernameExists = await Users.findOne({ username: req.body.username });
@@ -27,7 +30,6 @@ router.post("/", async (req, res) => {
     }
   } else {
     res.json("Username already exists");
-    console.log("Username already exists");
   }
 });
 
