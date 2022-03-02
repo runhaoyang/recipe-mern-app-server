@@ -7,15 +7,17 @@ router.get("/", async (req, res) => {
   res.send(user);
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const user = new Users({
     username: req.body.username,
     password: req.body.password,
   });
-  user
-    .save()
-    .then((data) => res.json(data))
-    .catch((err) => res.json({ message: err }));
+  try {
+    const savedUser = await user.save();
+    res.json(savedUser);
+  } catch (err) {
+    res.json({ message: err });
+  }
 });
 
 module.exports = router;
