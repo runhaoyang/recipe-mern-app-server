@@ -3,15 +3,15 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
-const axios = require("axios");
+const usersRoute = require("./routes/users");
 
 const app = express();
 const port = 5000;
 
+app.use(express.json());
 app.use(cors());
 
 // Import routes
-const usersRoute = require("./routes/users");
 app.use("/users", usersRoute);
 
 mongoose.connect(process.env.MONGO_URL, {
