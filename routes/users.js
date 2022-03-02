@@ -7,17 +7,17 @@ router.get("/", async (req, res) => {
   res.send(user);
 });
 
-router.post("/", async (req, res) => {
-  const user = new Users({
-    username: req.body.username,
-    password: req.body.password,
-  });
-  try {
-    const savedUser = await user.save();
-    res.json(savedUser);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
+// router.post("/", async (req, res) => {
+//   const user = new Users({
+//     username: req.body.username,
+//     password: req.body.password,
+//   });
+//   try {
+//     const savedUser = await user.save();
+//     res.json(savedUser);
+//   } catch (err) {
+//     res.json({ message: err });
+//   }
+// });
 
 module.exports = router;
