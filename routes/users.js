@@ -3,6 +3,8 @@ const router = express.Router();
 const Users = require("../models/Users");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
@@ -24,10 +26,24 @@ router.post("/", async (req, res) => {
         username: req.body.username,
         password: hashedPassword,
       });
-      const savedUser = await user.save();
-      res.json(savedUser);
+      await user.save();
+
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+      jwt.sign(
+        payload,
+        process.env.jwtSecret,
+        { expiresIn: 3600 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
     } catch (err) {
-      res.json({ message: err });
+      res.status(500).json({ message: err });
     }
   } else {
     res.status(400).send("User already exists");
