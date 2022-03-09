@@ -9,12 +9,17 @@ require("dotenv").config();
 const app = express();
 app.use(cors());
 
+// @route GET /users
+// @desc Get all users from the Users schema
+// @access Public
 router.get("/", async (req, res) => {
   const user = await Users.find({});
   res.send(user);
 });
 
-// User registration
+// @route POST /users
+// @desc Register a user
+// @access Public
 router.post("/", async (req, res) => {
   // Check to see if username already exists in the database
   const usernameExists = await Users.findOne({ username: req.body.username });

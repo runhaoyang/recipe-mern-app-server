@@ -4,7 +4,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const usersRoute = require("./routes/users");
-
+const authRoute = require("./routes/auth");
+const recipeRoute = require("./routes/recipes");
 const app = express();
 const port = 5000;
 
@@ -13,6 +14,8 @@ app.use(cors());
 
 // Import routes
 app.use("/users", usersRoute);
+app.use("/auth", authRoute);
+app.use("/recipes", recipeRoute);
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
