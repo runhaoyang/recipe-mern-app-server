@@ -11,7 +11,9 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const recipeExists = await Recipe.findOne({ idMeal: req.body.idMeal });
-  if (!recipeExists) {
+  if (recipeExists) {
+    res.status(400).send("Recipe already exists");
+  } else {
     try {
       const recipe = new Recipe({
         idMeal: req.body.idMeal,
@@ -66,8 +68,6 @@ router.post("/", async (req, res) => {
     } catch (err) {
       res.status(500).json({ message: err });
     }
-  } else {
-    res.status(400).send("Recipe already exists in the database");
   }
 });
 
