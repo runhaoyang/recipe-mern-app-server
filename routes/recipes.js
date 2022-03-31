@@ -1,14 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const Recipe = require("../models/Recipe");
+const Users = require("../models/Users");
 const cors = require("cors");
 require("dotenv").config();
 
+// @route GET /recipes
+// @desc Get all recipes
+// @access Public
 router.get("/", async (req, res) => {
   const recipes = await Recipe.find({});
   res.send(recipes);
 });
 
+// @route POST /recipes
+// @desc POST a recipe to the recipes database
+// @access Public
 router.post("/", async (req, res) => {
   const recipeExists = await Recipe.findOne({ idMeal: req.body.idMeal });
   if (recipeExists) {
@@ -65,10 +72,50 @@ router.post("/", async (req, res) => {
       });
       await recipe.save();
       res.send("ok");
-    } catch (err) {
-      res.status(500).json({ message: err });
+    } catch (error) {
+      res.status(500).json({ message: error });
     }
   }
+});
+
+// @route POST /recipes/save
+// @desc POST a recipe to the user's collections
+// @access Private
+router.post("/save", async (req, res) => {
+  Users.findOneAndUpdate(
+    { username: req.body.username },
+    {
+      $push: { recipes: req.body.recipes },
+    },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        res.status(500).json({ message: error });
+        console.log(err);
+      }
+      res.status(200).json(user);
+    }
+  );
+});
+
+// @route GET /recipes/exists
+// @desc GET confirmation on whether a recipe already exists in the user's recipes array
+// @access Private
+router.post("/exists", async (req, res) => {
+  Users.findOne({ username: req.body.username }, (err, user) => {
+    if (err) {
+      res.status(500).json({ message: err });
+      console.log(err);
+    }
+    for (recipe of user.recipes) {
+      if (recipe.idMeal === req.body.recipes.idMeal) {
+        return res
+          .status(400)
+          .json({ message: "Recipe already exist in the user's collections." });
+      }
+    }
+    res.status(200).json("doesNotExist");
+  });
 });
 
 module.exports = router;

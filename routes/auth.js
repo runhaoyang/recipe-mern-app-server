@@ -8,10 +8,10 @@ require("dotenv").config();
 
 // @route GET /auth
 // @desc  Get a specific user's details
-// @access Public
+// @access Private
 router.get("/", auth, async (req, res) => {
   try {
-    const user = await Users.findById(req.user.id).select("-password");
+    const user = await Users.findById(req.user.id);
     res.json(user);
   } catch (err) {
     console.error(err.message);
