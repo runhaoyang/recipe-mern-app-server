@@ -98,6 +98,26 @@ router.post("/save", async (req, res) => {
   );
 });
 
+// @route DELETE /recipes/delete
+// @desc DELETE a recipe from the user's collections
+// @access Private
+router.post("/delete", async (req, res) => {
+  Users.findOneAndUpdate(
+    { username: req.body.username },
+    {
+      $pull: { recipes: req.body.recipes },
+    },
+    (err, data) => {
+      if (err) {
+        res.status(500).json({ message: error });
+        console.log(err);
+      }
+      res.status(200).json(data);
+      console.log(data);
+    }
+  );
+});
+
 // @route GET /recipes/exists
 // @desc GET confirmation on whether a recipe already exists in the user's recipes array
 // @access Private

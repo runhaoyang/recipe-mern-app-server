@@ -55,4 +55,17 @@ router.post("/", async (req, res) => {
   }
 });
 
+// @route GET /users/recipes
+// @desc Get current user's recipes
+// @access Public
+router.post("/recipes", async (req, res) => {
+  Users.findOne({ username: req.body.username }, (err, user) => {
+    if (err) {
+      res.status(500).json({ message: err });
+      console.log(err);
+    }
+    res.status(200).json(user);
+  });
+});
+
 module.exports = router;
