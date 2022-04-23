@@ -153,7 +153,7 @@ router.post("/exists", async (req, res) => {
       if (recipe.idMeal === req.body.recipes.idMeal) {
         return res
           .status(400)
-          .json({ message: "Recipe already exist in the user's collections." });
+          .json({ message: "Recipe already exist in the user's collections" });
       }
     }
     res.status(200).json("doesNotExist");
