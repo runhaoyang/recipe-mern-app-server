@@ -76,7 +76,6 @@ router.post("/", async (req, res) => {
       res.send("Submitted recipe success.");
     } catch (error) {
       res.status(500).json({ message: error });
-      console.log(error);
     }
   }
 });
@@ -89,11 +88,8 @@ router.get("/getLastId", (req, res) => {
     .sort({ idMeal: -1 })
     .exec((err, result) => {
       if (err) {
+        res.status(500).json({ message: err });
         console.log(err);
-        return res.status(500).json({ message: err });
-      }
-      if (!result) {
-        return res.status(200).json(0);
       }
       res.status(200).json(result.idMeal);
       console.log(result.idMeal);
@@ -144,7 +140,7 @@ router.post("/delete", async (req, res) => {
 // @desc GET confirmation on whether a recipe already exists in the user's recipes array
 // @access Private
 router.post("/exists", async (req, res) => {
-  await Users.findOne({ username: req.body.username }, (err, user) => {
+  Users.findOne({ username: req.body.username }, (err, user) => {
     if (err) {
       res.status(500).json({ message: err });
       console.log(err);
@@ -153,13 +149,11 @@ router.post("/exists", async (req, res) => {
       if (recipe.idMeal === req.body.recipes.idMeal) {
         return res
           .status(400)
-          .json({ message: "Recipe already exist in the user's collections" });
+          .json({ message: "Recipe already exist in the user's collections." });
       }
     }
     res.status(200).json("doesNotExist");
   });
 });
-
-router;
 
 module.exports = router;
