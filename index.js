@@ -6,16 +6,20 @@ require("dotenv").config();
 const usersRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const recipeRoute = require("./routes/recipes");
+const submittedRecipesRoute = require("./routes/submittedRecipes");
 const app = express();
+const path = require("path");
 const port = 5000;
 
 app.use(express.json({ extended: false }));
 app.use(cors());
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // Import routes
 app.use("/users", usersRoute);
 app.use("/auth", authRoute);
 app.use("/recipes", recipeRoute);
+app.use("/submittedRecipes", submittedRecipesRoute);
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,

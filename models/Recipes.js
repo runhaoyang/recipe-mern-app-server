@@ -7,7 +7,6 @@ const RecipeSchema = new mongoose.Schema({
   },
   strCategory: {
     type: String,
-    required: true,
   },
   strIngredient1: {
     type: String,
@@ -71,7 +70,6 @@ const RecipeSchema = new mongoose.Schema({
   },
   strInstructions: {
     type: String,
-    required: true,
   },
   strMeal: {
     type: String,
@@ -143,8 +141,12 @@ const RecipeSchema = new mongoose.Schema({
   strYoutube: {
     type: String,
   },
+  userSubmitted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const Recipe = mongoose.model("Recipe", RecipeSchema);
+const Recipes = mongoose.model("Recipe", RecipeSchema);
 
-module.exports = Recipe;
+module.exports = Recipes;

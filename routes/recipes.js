@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Recipe = require("../models/Recipe");
+const Recipes = require("../models/Recipes");
 const Users = require("../models/Users");
+const auth = require("../middleware/auth");
 const cors = require("cors");
 require("dotenv").config();
 
@@ -9,20 +10,20 @@ require("dotenv").config();
 // @desc Get all recipes
 // @access Public
 router.get("/", async (req, res) => {
-  const recipes = await Recipe.find({});
+  const recipes = await Recipes.find({});
   res.send(recipes);
 });
 
 // @route POST /recipes
-// @desc POST a recipe to the recipes database
+// @desc Save a recipe to the recipes database
 // @access Public
 router.post("/", async (req, res) => {
-  const recipeExists = await Recipe.findOne({ idMeal: req.body.idMeal });
+  const recipeExists = await Recipes.findOne({ idMeal: req.body.idMeal });
   if (recipeExists) {
     res.status(400).send("Recipe already exists");
   } else {
     try {
-      const recipe = new Recipe({
+      const recipe = new Recipes({
         idMeal: req.body.idMeal,
         strCategory: req.body.strCategory,
         strIngredient1: req.body.strIngredient1,
@@ -69,13 +70,34 @@ router.post("/", async (req, res) => {
         strMeasure19: req.body.strMeasure19,
         strMeasure20: req.body.strMeasure20,
         strYoutube: req.body.strYoutube,
+        userSubmitted: req.body.userSubmitted,
       });
       await recipe.save();
-      res.send("ok");
+      res.send("Submitted recipe success.");
     } catch (error) {
       res.status(500).json({ message: error });
+      console.log(error);
     }
   }
+});
+
+// @route POST /recipes/getLastId
+// @desc Get the id of the recipe with the highest id
+// @access Public
+router.get("/getLastId", (req, res) => {
+  Recipes.findOne({})
+    .sort({ idMeal: -1 })
+    .exec((err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ message: err });
+      }
+      if (!result) {
+        return res.status(200).json(0);
+      }
+      res.status(200).json(result.idMeal);
+      console.log(result.idMeal);
+    });
 });
 
 // @route POST /recipes/save
@@ -122,7 +144,7 @@ router.post("/delete", async (req, res) => {
 // @desc GET confirmation on whether a recipe already exists in the user's recipes array
 // @access Private
 router.post("/exists", async (req, res) => {
-  Users.findOne({ username: req.body.username }, (err, user) => {
+  await Users.findOne({ username: req.body.username }, (err, user) => {
     if (err) {
       res.status(500).json({ message: err });
       console.log(err);
@@ -137,5 +159,7 @@ router.post("/exists", async (req, res) => {
     res.status(200).json("doesNotExist");
   });
 });
+
+router;
 
 module.exports = router;
