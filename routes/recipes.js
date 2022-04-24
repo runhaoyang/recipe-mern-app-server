@@ -75,6 +75,7 @@ router.post("/", async (req, res) => {
       await recipe.save();
       res.send("Submitted recipe success.");
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: error });
     }
   }
@@ -88,11 +89,14 @@ router.get("/getLastId", (req, res) => {
     .sort({ idMeal: -1 })
     .exec((err, result) => {
       if (err) {
-        res.status(500).json({ message: err });
         console.log(err);
+        res.status(500).json({ message: err });
       }
-      res.status(200).json(result.idMeal);
+      if (!result) {
+        return res.status(200).json(0);
+      }
       console.log(result.idMeal);
+      res.status(200).json(result.idMeal);
     });
 });
 
@@ -108,8 +112,8 @@ router.post("/save", async (req, res) => {
     { new: true },
     (err, user) => {
       if (err) {
-        res.status(500).json({ message: error });
         console.log(err);
+        res.status(500).json({ message: error });
       }
       res.status(200).json(user);
     }
@@ -127,11 +131,11 @@ router.post("/delete", async (req, res) => {
     },
     (err, data) => {
       if (err) {
-        res.status(500).json({ message: error });
         console.log(err);
+        res.status(500).json({ message: error });
       }
-      res.status(200).json(data);
       console.log(data);
+      res.status(200).json(data);
     }
   );
 });
