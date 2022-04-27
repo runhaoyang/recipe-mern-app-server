@@ -72,6 +72,10 @@ router.post("/", async (req, res) => {
         strYoutube: req.body.strYoutube,
         userSubmitted: req.body.userSubmitted,
         postedBy: req.body.postedBy,
+        date:
+          new Date().toLocaleString([], { hour12: true }) +
+          " " +
+          new Date().toTimeString().slice(9, 17),
       });
       await recipe.save();
       res.send("Submitted recipe success.");

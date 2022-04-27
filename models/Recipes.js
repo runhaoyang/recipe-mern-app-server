@@ -148,6 +148,9 @@ const RecipeSchema = new mongoose.Schema({
   postedBy: {
     type: String,
   },
+  date: {
+    type: String,
+  },
 });
 
 const Recipes = mongoose.model("Recipe", RecipeSchema);
