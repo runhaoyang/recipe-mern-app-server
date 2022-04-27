@@ -145,6 +145,9 @@ const RecipeSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  postedBy: {
+    type: String,
+  },
 });
 
 const Recipes = mongoose.model("Recipe", RecipeSchema);

@@ -71,6 +71,7 @@ router.post("/", async (req, res) => {
         strMeasure20: req.body.strMeasure20,
         strYoutube: req.body.strYoutube,
         userSubmitted: req.body.userSubmitted,
+        postedBy: req.body.postedBy,
       });
       await recipe.save();
       res.send("Submitted recipe success.");
