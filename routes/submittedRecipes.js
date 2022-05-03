@@ -17,58 +17,24 @@ router.get("/", async (req, res) => {
   res.status(200).json(recipes);
 });
 
-// Storage
-const Storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().toISOString().split("T")[0] + "-" + file.originalname);
-  },
-});
-const fileFilter = (req, file, cb) => {
-  const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
-  if (allowedFileTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
-
-let upload = multer({ storage: Storage, fileFilter: fileFilter });
-
 // @route POST /submittedRecipes/submit
 // @desc Save a recipe to the SubmittedRecipes database
 // @access Private
-router.post("/submit", upload.single("file"), async (req, res, next) => {
+router.post("/submit", async (req, res, next) => {
   try {
-    let submittedRecipe;
-    if (req.file) {
-      submittedRecipe = new SubmittedRecipes({
-        idMeal: req.body.lastId,
-        postedBy: req.body.postedBy,
-        strCategory: req.body.recipeCategory,
-        strIngredients: JSON.parse(req.body.ingredientList),
-        strInstructions: JSON.parse(req.body.instructions),
-        strQuantity: JSON.parse(req.body.quantityList),
-        strMeal: req.body.recipeName,
-        fileName: req.file.filename,
-        filePath: req.file.path,
-        fileType: req.file.mimetype,
-        date: req.body.date,
-      });
-    } else {
-      submittedRecipe = new SubmittedRecipes({
-        idMeal: req.body.lastId,
-        postedBy: req.body.postedBy,
-        strCategory: req.body.recipeCategory,
-        strIngredients: JSON.parse(req.body.ingredientList),
-        strInstructions: JSON.parse(req.body.instructions),
-        strQuantity: JSON.parse(req.body.quantityList),
-        strMeal: req.body.recipeName,
-        date: req.body.date,
-      });
-    }
+    const submittedRecipe = new SubmittedRecipes({
+      idMeal: req.body.lastId,
+      postedBy: req.body.postedBy,
+      strCategory: req.body.recipeCategory,
+      strIngredients: JSON.parse(req.body.ingredientList),
+      strInstructions: JSON.parse(req.body.instructions),
+      strQuantity: JSON.parse(req.body.quantityList),
+      strMeal: req.body.recipeName,
+      fileName: req.body.fileName,
+      filePath: req.body.filePath,
+      fileType: req.body.fileType,
+      date: req.body.date,
+    });
     await submittedRecipe.save();
     res.json(submittedRecipe);
   } catch (error) {
