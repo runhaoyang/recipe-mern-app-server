@@ -48,9 +48,9 @@ router.post("/submit", async (req, res, next) => {
 // @access Private
 router.delete("/delete/:id", async (req, res) => {
   await SubmittedRecipes.deleteOne({ idMeal: req.params.id })
-    .then((recipe) => {
-      console.log(recipe);
-      res.status(200).json(recipe);
+    .then((message) => {
+      console.log(message);
+      res.status(200).json(message);
     })
     .catch((err) => {
       console.log(err.message);

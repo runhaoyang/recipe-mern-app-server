@@ -142,6 +142,21 @@ router.post("/delete", async (req, res) => {
   );
 });
 
+// @route DELETE /recipes/delete/:id
+// @desc DELETE a recipe from the recipes database
+// @access Private
+router.delete("/delete/:id", async (req, res) => {
+  await Recipes.deleteOne({ idMeal: req.params.id })
+    .then((message) => {
+      console.log(message);
+      res.status(200).json(message);
+    })
+    .catch((err) => {
+      console.log(err.message);
+      res.status(500).json(err.message);
+    });
+});
+
 // @route GET /recipes/exists
 // @desc GET confirmation on whether a recipe already exists in the user's recipes array
 // @access Private
